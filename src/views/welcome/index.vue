@@ -28,13 +28,9 @@ import { RouterLink } from "vue-router";
 
 <style scoped>
 .container {
-    background: #333;
     height: 100%;
     width: 100%;
     color: #fff;
-    background: url("https://ts1.cn.mm.bing.net/th/id/R-C.d580bcb7ced548c5a9db94e3305eeed9?rik=s8GGOCgDekpjmw&riu=http%3a%2f%2fwww.quazero.com%2fuploads%2fallimg%2f140228%2f1-14022QA425.jpg&ehk=l68Ph3CRJIESWQe6smUc%2fK4qv1ugsP8MTO0TvMQv5Ns%3d&risl=&pid=ImgRaw&r=0");
-    background-position: center;
-    background-repeat: no-repeat;
 }
 
 .container::before {
@@ -93,14 +89,5 @@ a {
     border: 2px solid #fff;
 }
 
-@keyframes card-show {
-    0% {
-        opacity: 0;
-        transform: scale(0.8);
-    }
-    100% {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
+
 </style>
