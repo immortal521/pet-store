@@ -30,7 +30,18 @@
                     placeholder="Password"
                     name="password"
                     v-model="formData.password"
+                    @change="checkPassword"
                 />
+                <span
+                    v-if="inputError"
+                    style="
+                        color: red;
+                        font-size: 12px;
+                        display: block;
+                        font-weight: normal;
+                    "
+                    >密码格式应为8-18位字母加数字或字符的组合</span
+                >
                 <div class="btn-container">
                     <input type="submit" value="Login" id="login" class="btn" />
                     <div class="btn">Register</div>
@@ -42,12 +53,68 @@
 
 <script setup>
 import { ref } from "vue";
+import CryptoJS from "crypto-js";
+import httpService from "@/utils/http.service.js";
+/**
+ * 表单接收数据
+ */
 const formData = ref({
     username: "",
     password: "",
 });
-function login() {
-    console.log(formData.value);
+
+/**
+ * 密码格式错误判断
+ */
+const inputError = ref(false);
+function checkPassword() {
+    if (
+        formData.value.password == "" ||
+        typeof formData.value.password == "undefined"
+    ) {
+        inputError.value = false;
+        return;
+    }
+    // 匹配字母+数字或字母+字符或字母+数字+字符
+    const regexp =
+        /(?=.*[a-zA-Z])(?=.*[0-9!@#$%^&*()-_+=])[a-zA-Z0-9!@#$%^&*()-_+=]{8,18}/;
+    if (regexp.test(formData.value.password) == false) {
+        inputError.value = true;
+    } else {
+        inputError.value = false;
+    }
+}
+
+/**
+ * 登录
+ */
+async function login() {
+    if (
+        inputError.value ||
+        formData.value.password == "" ||
+        formData.value.username == ""
+    ) {
+        return;
+    }
+
+    const user = {
+        name: formData.value.username,
+        password: encryptPassword(formData.value.password),
+    };
+
+    const result = await httpService.post("/login", user);
+    console.log(result);
+}
+
+/**
+ * 密码加密函数
+ * @param {*} password 密码
+ */
+function encryptPassword(password) {
+    const hash = CryptoJS.SHA256(password);
+    // 将密码转换为哈希值，并以十六进制编码输出
+    const hashedPassword = hash.toString();
+    return hashedPassword;
 }
 </script>
 
@@ -152,7 +219,7 @@ function login() {
     outline: none;
     color: rgb(0, 0, 0);
     max-width: 260px;
-    margin-bottom: 2vh;
+    margin-top: 2vh;
     font-size: 16px;
     color: #7597ff;
 }
@@ -163,6 +230,7 @@ input[type="password"]::placeholder {
 }
 
 .btn-container {
+    margin-top: 2vh;
     display: flex;
     justify-content: center;
 }
