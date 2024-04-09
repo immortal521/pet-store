@@ -101,7 +101,7 @@ async function login() {
         name: formData.value.username,
         password: encryptPassword(formData.value.password),
     };
-
+    console.log(user);
     const result = await httpService.post("/login", user);
     console.log(result);
 }
