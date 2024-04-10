@@ -15,22 +15,26 @@
             </div>
         </aside>
         <div class="form-container">
-            <form @submit.prevent="login" class="login" v-if="isLogining">
+            <form
+                @submit.prevent="login"
+                class="login"
+                v-if="currentPage === 0"
+            >
                 <div class="login-title">Login</div>
                 <input
                     name="username"
                     type="text"
                     placeholder="Username"
                     autocomplete="username"
-                    v-model="loginData.username"
+                    v-model="loginForm.username"
                 />
 
                 <input
                     type="password"
                     placeholder="Password"
                     name="password"
-                    v-model="loginData.password"
-                    @change="checkPassword(loginData.password)"
+                    v-model="loginForm.password"
+                    @change="inputError = checkPassword(loginForm.password)"
                 />
                 <span
                     v-if="inputError"
@@ -44,214 +48,71 @@
                 >
                 <div class="btn-container">
                     <input type="submit" value="Login" id="login" class="btn" />
-                    <div class="btn" @click="toRegister">Register</div>
-                </div>
-            </form>
-            <form @submit.prevent="register" class="login" v-if="!isLogining">
-                <div class="login-title">Register</div>
-                <input
-                    name="username"
-                    type="text"
-                    placeholder="Username"
-                    autocomplete="username"
-                    v-model="registerData.username"
-                />
-
-                <input
-                    type="password"
-                    placeholder="Password"
-                    name="password"
-                    v-model="registerData.firstPassword"
-                    @change="checkPassword(registerData.firstPassword)"
-                />
-                <input
-                    type="password"
-                    placeholder="Password again"
-                    name="password"
-                    v-model="registerData.secondPassword"
-                    @change="
-                        () => {
-                            checkPassword(registerData.secondPassword);
-                            checkPasswordIsSame();
-                        }
-                    "
-                />
-                <span
-                    v-if="inputError"
-                    style="
-                        color: red;
-                        font-size: 12px;
-                        display: block;
-                        font-weight: normal;
-                    "
-                    >密码格式应为8-18位字母加数字或字符的组合</span
-                >
-
-                <input
-                    type="text"
-                    placeholder="Phone"
-                    name="phone"
-                    v-model="registerData.phone"
-                />
-                <span
-                    v-if="!passwordIsSame"
-                    style="
-                        color: red;
-                        font-size: 12px;
-                        display: block;
-                        font-weight: normal;
-                    "
-                    >两次密码不相同</span
-                >
-
-                <div class="btn-container">
-                    <input
-                        type="submit"
-                        value="Register"
-                        id="Register"
+                    <div
                         class="btn"
-                    />
-                    <div class="btn" @click="toLogin">back</div>
+                        @click="useUserStoreHook().SET_CURRENTPAGE(1)"
+                    >
+                        Register
+                    </div>
                 </div>
             </form>
+            <Regist v-if="currentPage === 1"> </Regist>
         </div>
     </div>
-    <PetDialog width="200" v-model="DialogVisible"
-        ><div style="text-align: center; padding: 20px">
-            {{ registerInfo }}
-        </div></PetDialog
-    >
+    <PetDialog width="200" v-model="loginDialog">{{ loginError }}</PetDialog>
 </template>
 
 <script setup>
-import { ref } from "vue";
-import CryptoJS from "crypto-js";
+import { ref, computed } from "vue";
+import { useUserStoreHook } from "@/stores/modules/user";
+import Regist from "./components/regist.vue";
+import { checkPassword } from "./utils/rule";
 import router from "@/router/index.js";
-import httpService from "@/utils/http.service.js";
+import { checkForm } from "./utils/checkForm";
 import PetDialog from "@/components/PetDialog/index.vue";
-const DialogVisible = ref(false);
-
-const isLogining = ref(true);
+import { encryptPassword } from "./utils/pwdUtils";
 
 /**
  * 表单接收数据
  */
-const loginData = ref({
+const loginForm = ref({
     username: "",
     password: "",
 });
 
-const registerData = ref({
-    username: "",
-    firstPassword: "",
-    secondPassword: "",
-    phone: "",
-});
-
-/**
- * 密码格式错误判断
- */
 const inputError = ref(false);
-function checkPassword(password) {
-    if (password == "" || typeof password == "undefined") {
-        inputError.value = false;
-        return;
-    }
-    // 匹配字母+数字或字母+字符或字母+数字+字符
-    const regexp =
-        /(?=.*[a-zA-Z])(?=.*[0-9!@#$%^&*()-_+=])[a-zA-Z0-9!@#$%^&*()-_+=]{8,18}/;
-    if (regexp.test(password) == false) {
-        inputError.value = true;
-    } else {
-        inputError.value = false;
-    }
-}
 
 /**
  * 登录
  */
 async function login() {
-    if (
-        inputError.value ||
-        loginData.value.password == "" ||
-        loginData.value.username == ""
-    ) {
+    if (inputError.value || checkForm(loginForm.value)) {
         inputError.value = true;
         return;
     }
 
     const user = {
-        userName: loginData.value.username,
-        password: encryptPassword(loginData.value.password),
+        userName: loginForm.value.username,
+        password: encryptPassword(loginForm.value.password),
     };
-    const result = await httpService.post("/login", user);
+
+    const result = await useUserStoreHook().loginByUserName(user);
+
     if (result.code == 200) {
         localStorage.token = result.data;
         router.push("/goods");
-    }
-}
-
-const registerInfo = ref("");
-
-async function register() {
-    if (
-        !passwordIsSame.value ||
-        inputError.value ||
-        registerData.value.firstPassword == "" ||
-        registerData.value.username == "" ||
-        registerData.value.secondPassword == "" ||
-        registerData.value.phone == ""
-    ) {
-        inputError.value = true;
-        return;
-    }
-    const newUser = {
-        userName: registerData.value.username,
-        password: encryptPassword(registerData.value.firstPassword),
-        phone: registerData.value.phone,
-    };
-    const result = await httpService.post("/register", newUser);
-    if (result.code == 200) {
-        registerInfo.value = "注册成功";
-        DialogVisible.value = true;
-        toLogin();
     } else {
-        registerInfo.value = result.msg;
-        DialogVisible.value = true;
+        loginError.value = result.msg;
+        loginDialog.value = true;
     }
 }
 
-/**
- * 密码加密函数
- * @param {*} password 密码
- */
-function encryptPassword(password) {
-    const hash = CryptoJS.SHA256(password);
-    // 将密码转换为哈希值，并以十六进制编码输出
-    const hashedPassword = hash.toString();
-    return hashedPassword;
-}
+const loginDialog = ref(false);
+const loginError = ref("");
 
-function toRegister() {
-    isLogining.value = false;
-    loginData.userName = "";
-    loginData.password = "";
-}
-
-function toLogin() {
-    isLogining.value = true;
-    registerData.userName = "";
-    registerData.phone = "";
-    registerData.secondPassword = "";
-    registerData.firstPassword = "";
-    inputError.value = false;
-}
-
-const passwordIsSame = ref(true);
-function checkPasswordIsSame() {
-    passwordIsSame.value =
-        registerData.value.firstPassword == registerData.value.secondPassword;
-}
+const currentPage = computed(() => {
+    return useUserStoreHook().currentPage;
+});
 </script>
 
 <style scoped>
