@@ -2,7 +2,7 @@ import axios from "axios";
 
 const httpService = axios.create({
     baseURL: "/api/",
-    timeout: 5000,
+    timeout: 50000,
 });
 
 // 添加请求拦截器

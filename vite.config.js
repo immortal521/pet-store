@@ -15,7 +15,7 @@ export default defineConfig({
     server: {
         proxy: {
             "^/api/.*": {
-                target: "https://yapi.pro/mock/341554",
+                target: "http://localhost:8080/",
                 changeOrigin: true,
                 rewrite: (path) => path.replace(/^\/api/, ""),
             },
