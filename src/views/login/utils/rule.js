@@ -10,7 +10,3 @@ export function checkPassword(password) {
     }
     return false;
 }
-
-export function checkPasswordIsSame(firstPwd, scecondPwd) {
-    return firstPwd === scecondPwd;
-}

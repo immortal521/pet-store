@@ -14,22 +14,12 @@
             placeholder="Password"
             name="password"
             v-model="registForm.firstPassword"
-            @change="inputError = checkPassword(registForm.firstPassword)"
         />
         <input
             type="password"
             placeholder="Password again"
             name="password"
             v-model="registForm.secondPassword"
-            @change="
-                () => {
-                    checkPassword(registForm.secondPassword);
-                    passwordIsSame = checkPasswordIsSame(
-                        registForm.firstPassword,
-                        registForm.secondPassword
-                    );
-                }
-            "
         />
         <span
             v-if="inputError"
@@ -72,12 +62,12 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useUserStoreHook } from "@/stores/modules/user";
-import { checkForm } from "../utils/checkForm";
-import { checkPassword, checkPasswordIsSame } from "../utils/rule";
+import { checkForm, formToEmpty } from "../utils/formUtils";
 import PetDialog from "@/components/PetDialog/index.vue";
 import { encryptPassword } from "../utils/pwdUtils";
+import { checkPassword } from "../utils/rule";
 
 const registForm = ref({
     username: "",
@@ -86,11 +76,18 @@ const registForm = ref({
     phone: "",
 });
 
-const inputError = ref(false);
+const inputError = computed(() => {
+    return (
+        checkPassword(registForm.value.firstPassword) ||
+        checkPassword(registForm.value.secondPassword)
+    );
+});
 
 const registDialog = ref(false);
 
-const passwordIsSame = ref(true);
+const passwordIsSame = computed(() => {
+    return registForm.value.firstPassword === registForm.value.secondPassword;
+});
 
 const registerInfo = ref("");
 
@@ -102,13 +99,13 @@ async function register() {
     const newUser = {
         userName: registForm.value.username,
         password: encryptPassword(registForm.value.firstPassword),
-        phone: registForm.value.phone,
+        phoneNumber: registForm.value.phone,
     };
     const result = await useUserStoreHook().registByUserName(newUser);
     if (result.code == 200) {
         registerInfo.value = "注册成功";
         registDialog.value = true;
-        useUserStoreHook().SET_CURRENTPAGE(0);
+        formToEmpty(registForm.value);
     } else {
         registerInfo.value = result.msg;
         registDialog.value = true;

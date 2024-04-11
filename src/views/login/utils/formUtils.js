@@ -7,3 +7,8 @@ export function checkForm(formObj) {
     return false;
 }
 
+export function formToEmpty(formObj) {
+    for (let key in formObj) {
+        formObj[key] = "";
+    }
+}

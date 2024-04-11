@@ -68,7 +68,7 @@ import { useUserStoreHook } from "@/stores/modules/user";
 import Regist from "./components/regist.vue";
 import { checkPassword } from "./utils/rule";
 import router from "@/router/index.js";
-import { checkForm } from "./utils/checkForm";
+import { checkForm } from "./utils/formUtils";
 import PetDialog from "@/components/PetDialog/index.vue";
 import { encryptPassword } from "./utils/pwdUtils";
 

@@ -1,8 +1,9 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import Welcome from "@/views/welcome/index.vue";
 import Login from "@/views/login/index.vue";
-import User from "@/views/user/index.vue";
-import Goods from "@/views/goods/index.vue";
+import User from "@/views/index/user/index.vue";
+import Index from "@/views/index/index.vue";
+import PetGoods from "@/views/index/petGoods/index.vue";
 
 const router = createRouter({
     history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -13,19 +14,26 @@ const router = createRouter({
             component: Welcome,
         },
         {
+            name: "index",
+            path: "/index",
+            component: Index,
+            children: [
+                {
+                    name: "petGoods",
+                    path: "/petGoods",
+                    component: PetGoods,
+                },
+                {
+                    name: "user",
+                    path: "/index",
+                    component: User,
+                },
+            ],
+        },
+        {
             name: "login",
             path: "/login",
             component: Login,
-        },
-        {
-            name: "user",
-            path: "/user",
-            component: User,
-        },
-        {
-            name: "goods",
-            path: "/goods",
-            component: Goods,
         },
     ],
 });
@@ -40,6 +48,9 @@ router.beforeEach(async (to, from) => {
     ) {
         // 将用户重定向到登录页面
         return { name: "login" };
+    }
+    if (to.name === "login" && isLogin()) {
+        return { name: "index" };
     }
 });
 

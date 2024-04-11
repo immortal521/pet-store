@@ -6,13 +6,13 @@
         <slot></slot>
         <div class="btn-container">
             <div class="btn" @click="exitDialog">取消</div>
-            <div class="btn" @click="exitDialog">确定</div>
+            <div class="btn" @click="confirm">确定</div>
         </div>
     </div>
 </template>
 
 <script setup>
-defineProps({
+const props = defineProps({
     width: {
         type: String,
         default: "400",
@@ -21,9 +21,19 @@ defineProps({
         type: String,
         default: "",
     },
+    callback: {
+        type: Function,
+        default: () => {
+            return;
+        },
+    },
 });
 
 const DialogVisible = defineModel();
+function confirm() {
+    DialogVisible.value = false;
+    props.callback();
+}
 function exitDialog() {
     DialogVisible.value = false;
 }
