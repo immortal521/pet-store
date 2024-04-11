@@ -1,13 +1,7 @@
 <template>
     <div class="container">
         <nav class="navication">
-            <div class="logo">
-                <i
-                    class="iconfont icon-cat logo"
-                    style="margin: 0 10px 0 5px"
-                ></i>
-                <span>Pet Store</span>
-            </div>
+            <PetLogo></PetLogo>
         </nav>
         <div class="scoll-images"></div>
 
@@ -24,6 +18,7 @@
 
 <script setup>
 import { RouterLink } from "vue-router";
+import PetLogo from "@/components/petLogo/index.vue";
 </script>
 
 <style scoped>
@@ -50,11 +45,6 @@ import { RouterLink } from "vue-router";
     height: 50px;
     line-height: 50px;
     padding: 0 10px 0 10px;
-}
-
-.logo {
-    font-size: 1.5rem;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .welcome {
@@ -88,6 +78,4 @@ a {
     color: #fff;
     border: 2px solid #fff;
 }
-
-
 </style>

@@ -1,13 +1,8 @@
 <template>
     <div class="container">
         <aside class="aside">
-            <div class="logo">
-                <i
-                    class="iconfont icon-cat"
-                    style="font-size: 2rem; margin-right: 15px"
-                ></i>
-                <span style="display: block">Pet Store</span>
-            </div>
+            <PetLogo style="position: relative; left: 20px; top: 5px"></PetLogo>
+
             <div class="welcome">
                 <div>WE</div>
                 <div>LOVE</div>
@@ -69,8 +64,9 @@ import Regist from "./components/regist.vue";
 import { checkPassword } from "./utils/rule";
 import router from "@/router/index.js";
 import { checkForm } from "./utils/formUtils";
-import PetDialog from "@/components/PetDialog/index.vue";
+import PetDialog from "@/components/petDialog/index.vue";
 import { encryptPassword } from "./utils/pwdUtils";
+import PetLogo from "@/components/petLogo/index.vue";
 
 /**
  * 表单接收数据
@@ -100,7 +96,7 @@ async function login() {
 
     if (result.code == 200) {
         localStorage.token = result.data;
-        router.push("/goods");
+        router.push("/index");
     } else {
         loginError.value = result.msg;
         loginDialog.value = true;
@@ -146,21 +142,6 @@ const currentPage = computed(() => {
 .aside {
     text-align: center;
     width: 50%;
-}
-
-.logo {
-    display: flex;
-    position: absolute;
-    line-height: 1.725;
-    font-size: clamp(1.725rem, 1.725vw, 2.625vw);
-    top: 2vh;
-    left: 2vw;
-    font-weight: bold;
-}
-
-.logo > i {
-    line-height: 1.725;
-    font-size: clamp(1.725rem, 1.725vw, 2.625vw) !important;
 }
 
 .welcome {

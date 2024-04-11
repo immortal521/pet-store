@@ -18,9 +18,9 @@
                         <span>宠物</span>
                     </span>
                 </template>
-                <a-menu-item key="2">Tom</a-menu-item>
-                <a-menu-item key="3">Bill</a-menu-item>
-                <a-menu-item key="4">Alex</a-menu-item>
+                <a-menu-item key="2">猫</a-menu-item>
+                <a-menu-item key="3">狗</a-menu-item>
+                <a-menu-item key="4">猪</a-menu-item>
             </a-sub-menu>
             <a-menu-item key="5">
                 <DesktopOutlined />

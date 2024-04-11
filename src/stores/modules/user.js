@@ -6,6 +6,7 @@ export const useUserStore = defineStore({
     id: "user",
     state: () => ({
         userName: "",
+        userAvator: "",
         currentPage: 0,
     }),
 
