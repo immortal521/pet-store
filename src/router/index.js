@@ -25,7 +25,7 @@ const router = createRouter({
                 },
                 {
                     name: "user",
-                    path: "/index",
+                    path: "/user",
                     component: User,
                 },
             ],

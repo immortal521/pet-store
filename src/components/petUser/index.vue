@@ -3,13 +3,12 @@
         <a-popover placement="topRight">
             <template #content>
                 <ul style="list-style: none">
-                    <li>个人中心</li>
-                    <li>退出登录</li>
+                    <slot></slot>
                 </ul>
             </template>
             <div class="head-image">
-                <img :src="1" alt="1" v-if="existAvator" />
-                <UserOutlined />
+                <img :src="userAvatar" alt="1" v-if="existAvator" />
+                <UserOutlined v-else />
             </div>
         </a-popover>
     </div>
@@ -19,14 +18,16 @@
 import { computed } from "vue";
 import { UserOutlined } from "@ant-design/icons-vue";
 const props = defineProps({
-    userAvator: {
+    userAvatar: {
         type: String,
         default: "",
     },
 });
 
+console.log(props.userAvatar);
+
 const existAvator = computed(() => {
-    return props.userAvator !== "" && typeof props.userAvator !== "undefined";
+    return props.userAvatar !== "" && typeof props.userAvatar !== "undefined";
 });
 </script>
 

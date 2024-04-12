@@ -3,7 +3,18 @@
         <div class="content">
             <PetLogo style="flex-grow: 1"></PetLogo>
             <div class="user">
-                <PetUser></PetUser>
+                <PetUser :userAvatar="user.avatar">
+                    <PetUserItem>
+                        <RouterLink
+                            to="/user"
+                            style="display: block; color: #000"
+                            >个人中心</RouterLink
+                        >
+                    </PetUserItem>
+                    <PetUserItem>
+                        <div @click="">退出登录</div>
+                    </PetUserItem>
+                </PetUser>
             </div>
         </div>
     </nav>
@@ -12,6 +23,16 @@
 <script setup>
 import PetLogo from "@/components/petLogo/index.vue";
 import PetUser from "@/components/petUser/index.vue";
+import PetUserItem from "@/components/petUserItem/index.vue";
+import { useUserStoreHook } from "@/stores/modules/user";
+import { RouterLink } from "vue-router";
+
+const user = {
+    name: useUserStoreHook().$state.userName,
+    avatar: useUserStoreHook().$state.userAvatar,
+};
+
+console.log(user);
 </script>
 
 <style scoped>

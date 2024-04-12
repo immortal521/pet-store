@@ -79,7 +79,8 @@ function toggleCollapsed() {
 
 .openMenu {
     position: relative;
-    width: 100%;
+    width: calc(100% - 6px);
+    margin: auto;
     background-color: #e6f4ff;
     height: 40px;
     line-height: 40px;
