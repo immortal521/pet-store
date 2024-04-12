@@ -36,7 +36,7 @@
             type="text"
             placeholder="Phone"
             name="phone"
-            v-model="registForm.phone"
+            v-model="registForm.phoneNumber"
         />
         <span
             v-if="!passwordIsSame"
@@ -73,7 +73,7 @@ const registForm = ref({
     username: "",
     firstPassword: "",
     secondPassword: "",
-    phone: "",
+    phoneNumber: "",
 });
 
 const inputError = computed(() => {
@@ -93,7 +93,6 @@ const registerInfo = ref("");
 
 async function register() {
     if (!passwordIsSame.value || checkForm(registForm.value)) {
-        inputError.value = true;
         return;
     }
     const newUser = {

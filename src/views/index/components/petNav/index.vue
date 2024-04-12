@@ -12,7 +12,7 @@
                         >
                     </PetUserItem>
                     <PetUserItem>
-                        <div @click="">退出登录</div>
+                        <div @click="exitLogin">退出登录</div>
                     </PetUserItem>
                 </PetUser>
             </div>
@@ -26,6 +26,13 @@ import PetUser from "@/components/petUser/index.vue";
 import PetUserItem from "@/components/petUserItem/index.vue";
 import { useUserStoreHook } from "@/stores/modules/user";
 import { RouterLink } from "vue-router";
+import router from "@/router/index.js";
+
+function exitLogin() {
+    console.log(1);
+    localStorage.removeItem("token");
+    router.push("/user");
+}
 
 const user = {
     name: useUserStoreHook().$state.userName,
