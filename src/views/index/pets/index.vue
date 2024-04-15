@@ -20,69 +20,19 @@ import httpService from "@/utils/http.service";
 import PetCard from "./components/petCard/index.vue";
 
 const route = useRoute();
-
+const petsList = ref([]);
 const petType = ref("cat");
 watch(
     () => route.params.petType,
-    (e) => {
+    async (e) => {
         petType.value = e;
+        console.log(petType.value);
     }
 );
-const petsList = ref([]);
+console.log(petType.value);
+
 // let res = await httpService.get("/petProduct/list");
 
-petsList.value = [
-    {
-        id: 10,
-        name: "1cat",
-        price: 1.234,
-    },
-    {
-        id: 9,
-        name: "2cat",
-        price: 1.234,
-    },
-    {
-        id: 8,
-        name: "3cat",
-        price: 1.234,
-    },
-    {
-        id: 7,
-        name: "4cat",
-        price: 1.234,
-    },
-    {
-        id: 6,
-        name: "5cat",
-        price: 1.234,
-    },
-    {
-        id: 5,
-        name: "1cat",
-        price: 1.234,
-    },
-    {
-        id: 4,
-        name: "2cat",
-        price: 1.234,
-    },
-    {
-        id: 3,
-        name: "3cat",
-        price: 1.234,
-    },
-    {
-        id: 2,
-        name: "4cat",
-        price: 1.234,
-    },
-    {
-        id: 1,
-        name: "5cat",
-        price: 1.234,
-    },
-];
 </script>
 
 <style scoped>

@@ -33,7 +33,9 @@ function exitLogin() {
     router.push("/user");
 }
 
-useUserStoreHook().SET_USERAVATAR("123");
+useUserStoreHook().SET_USERAVATAR(
+    "https://i.pximg.net/img-master/img/2024/04/15/00/00/43/117847824_p0_master1200.jpg"
+);
 useUserStoreHook().SET_USERNAME("123");
 
 const user = {
