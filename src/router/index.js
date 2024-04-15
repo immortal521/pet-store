@@ -39,7 +39,7 @@ const router = createRouter({
                 {
                     name: "petInfo",
                     path: "/petInfo/:id",
-                    component:PetInfo
+                    component: PetInfo,
                 },
             ],
         },
@@ -69,7 +69,7 @@ router.beforeEach(async (to, from) => {
 
 function isLogin() {
     const token = localStorage.token;
-    if (!token) return false;
+    if (token == "" || typeof token === "undefined" || token==null) return false;
 
     const exp = parseJwt(token).exp;
 
