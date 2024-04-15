@@ -69,7 +69,6 @@ router.beforeEach(async (to, from) => {
 
 function isLogin() {
     const token = localStorage.token;
-    console.log(token);
     if (token == "" || typeof token === "undefined" || token==null) return false;
 
     const exp = parseJwt(token).exp;

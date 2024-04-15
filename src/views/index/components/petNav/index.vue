@@ -33,17 +33,7 @@ function exitLogin() {
     router.push("/login");
 }
 
-useUserStoreHook().SET_USERAVATAR(
-    "https://i.pximg.net/img-master/img/2024/04/15/00/00/43/117847824_p0_master1200.jpg"
-);
-useUserStoreHook().SET_USERNAME("123");
-
-const user = {
-    name: useUserStoreHook().$state.userName,
-    avatar: useUserStoreHook().$state.userAvatar,
-};
-
-console.log(user);
+const user = useUserStoreHook().$state;
 </script>
 
 <style scoped>

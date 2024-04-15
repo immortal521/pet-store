@@ -26,10 +26,8 @@ watch(
     () => route.params.petType,
     async (e) => {
         petType.value = e;
-        console.log(petType.value);
     }
 );
-console.log(petType.value);
 
 // let res = await httpService.get("/petProduct/list");
 
