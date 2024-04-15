@@ -4,6 +4,9 @@ import Login from "@/views/login/index.vue";
 import User from "@/views/index/user/index.vue";
 import Index from "@/views/index/index.vue";
 import PetGoods from "@/views/index/petGoods/index.vue";
+import Pets from "@/views/index/pets/index.vue";
+import PetInfo from "@/views/index/petInfo/index.vue";
+import { parseJwt } from "@/utils/jwt";
 
 const router = createRouter({
     history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -19,6 +22,11 @@ const router = createRouter({
             component: Index,
             children: [
                 {
+                    name: "pets",
+                    path: "/pets/:petType",
+                    component: Pets,
+                },
+                {
                     name: "petGoods",
                     path: "/petGoods",
                     component: PetGoods,
@@ -27,6 +35,11 @@ const router = createRouter({
                     name: "user",
                     path: "/user",
                     component: User,
+                },
+                {
+                    name: "petInfo",
+                    path: "/petInfo/:id",
+                    component:PetInfo
                 },
             ],
         },
@@ -54,27 +67,12 @@ router.beforeEach(async (to, from) => {
     }
 });
 
-function parseJwt(token) {
-    const base64Url = token.split(".")[1];
-    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-    const jsonPayload = decodeURIComponent(
-        atob(base64)
-            .split("")
-            .map(function (c) {
-                return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-            })
-            .join("")
-    );
-
-    return JSON.parse(jsonPayload);
-}
-
 function isLogin() {
     const token = localStorage.token;
     if (!token) return false;
 
     const exp = parseJwt(token).exp;
-    console.log(Date.now() + " " + exp);
+
     if (Date.now() < exp * 1000) {
         return true;
     }

@@ -29,10 +29,12 @@ import { RouterLink } from "vue-router";
 import router from "@/router/index.js";
 
 function exitLogin() {
-    console.log(1);
     localStorage.removeItem("token");
     router.push("/user");
 }
+
+useUserStoreHook().SET_USERAVATAR("123");
+useUserStoreHook().SET_USERNAME("123");
 
 const user = {
     name: useUserStoreHook().$state.userName,

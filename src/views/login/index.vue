@@ -94,8 +94,7 @@ async function login() {
 
     const result = await useUserStoreHook().loginByUserName(user);
 
-    if (result.code == 200) {
-        localStorage.token = result.data;
+    if (result) {
         router.push("/index");
     } else {
         loginError.value = result.msg;

@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { store } from "@/stores";
 import httpService from "@/utils/http.service";
+import { parseJwt } from "@/utils/jwt";
 
 export const useUserStore = defineStore({
     id: "user",
@@ -17,8 +18,16 @@ export const useUserStore = defineStore({
         SET_CURRENTPAGE(value) {
             this.currentPage = value;
         },
+        SET_USERAVATAR(userAvatar) {
+            this.userAvatar = userAvatar;
+        },
         async loginByUserName(data) {
-            return await httpService.post("/login", data);
+            const res = await httpService.post("/login", data);
+            localStorage.token = res.data;
+            const user = parseJwt(res.data);
+            console.log(user);
+
+            return true;
         },
         async registByUserName(data) {
             return await httpService.post("/register", data);

@@ -24,7 +24,6 @@ const props = defineProps({
     },
 });
 
-console.log(props.userAvatar);
 
 const existAvator = computed(() => {
     return props.userAvatar !== "" && typeof props.userAvatar !== "undefined";

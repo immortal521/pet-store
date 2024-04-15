@@ -18,9 +18,15 @@
                         <span>宠物</span>
                     </span>
                 </template>
-                <a-menu-item key="2">猫</a-menu-item>
-                <a-menu-item key="3">狗</a-menu-item>
-                <a-menu-item key="4">猪</a-menu-item>
+                <a-menu-item key="2"
+                    ><RouterLink to="/pets/cat">猫</RouterLink></a-menu-item
+                >
+                <a-menu-item key="3"
+                    ><RouterLink to="/pets/dog">狗</RouterLink></a-menu-item
+                >
+                <a-menu-item key="4"
+                    ><RouterLink to="/pets/pig">猪</RouterLink></a-menu-item
+                >
             </a-sub-menu>
             <a-menu-item key="5">
                 <DesktopOutlined />

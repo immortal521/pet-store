@@ -21,6 +21,7 @@ import PetContent from "./components/petContent/index.vue";
     width: 100%;
     height: 100%;
     background-color: #fff;
+    overflow: hidden;
     /* position: fixed; */
 }
 

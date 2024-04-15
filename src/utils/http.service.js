@@ -8,7 +8,7 @@ const httpService = axios.create({
 // 添加请求拦截器
 httpService.interceptors.request.use(
     function (config) {
-        console.log(config);
+        
         // 在请求被发送之前做一些处理，例如添加 token 等
         // 可以在这里对 config 做一些修改
         return config;
