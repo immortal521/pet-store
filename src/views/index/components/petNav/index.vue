@@ -30,7 +30,7 @@ import router from "@/router/index.js";
 
 function exitLogin() {
     localStorage.removeItem("token");
-    router.push("/user");
+    router.push("/login");
 }
 
 useUserStoreHook().SET_USERAVATAR(
