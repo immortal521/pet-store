@@ -48,6 +48,42 @@
                         :disabled="componentDisabled"
                         style="max-width: 600px"
                     >
+                        <a-form-item
+                            style="
+                                display: flex;
+                                justify-content: center;
+                                width: 100%;
+                            "
+                        >
+                            <a-upload
+                                v-model:file-list="fileList"
+                                name="avatar"
+                                list-type="picture-card"
+                                class="avatar-uploader"
+                                :show-upload-list="false"
+                                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                                :before-upload="beforeUpload"
+                                @change="handleChange"
+                                style="
+                                    display: flex;
+                                    justify-content: center;
+                                    width: 100%;
+                                "
+                            >
+                                <img
+                                    v-if="imageUrl"
+                                    :src="imageUrl"
+                                    alt="avatar"
+                                />
+                                <div v-else>
+                                    <loading-outlined
+                                        v-if="loading"
+                                    ></loading-outlined>
+                                    <plus-outlined v-else></plus-outlined>
+                                    <div class="ant-upload-text">Upload</div>
+                                </div>
+                            </a-upload>
+                        </a-form-item>
                         <a-form-item label="联系方式">
                             <a-input v-model:value="userForm.phoneNumber" />
                         </a-form-item>
