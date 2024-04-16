@@ -49,10 +49,10 @@
                         style="max-width: 600px"
                     >
                         <a-form-item label="联系方式">
-                            <a-input />
+                            <a-input v-model:value="userForm.phoneNumber" />
                         </a-form-item>
                         <a-form-item label="性别">
-                            <a-select>
+                            <a-select v-model:value="userForm.sex">
                                 <a-select-option value="男">男</a-select-option>
                                 <a-select-option value="女">女</a-select-option>
                                 <a-select-option value="保密"
@@ -71,19 +71,24 @@
 import { useUserStoreHook } from "@/stores/modules/user";
 import { UserOutlined } from "@ant-design/icons-vue";
 import { ref } from "vue";
+const componentDisabled = ref(false);
 const user = useUserStoreHook().$state;
+const userForm = ref({
+    phoneNumber: user.phone,
+    sex: user.sex,
+});
 
 const loading = ref(false);
 const open = ref(false);
 const showModal = () => {
     open.value = true;
 };
-const handleOk = () => {
+const handleOk = async () => {
     loading.value = true;
-    setTimeout(() => {
-        loading.value = false;
-        open.value = false;
-    }, 2000);
+    console.log(userForm.value);
+    await useUserStoreHook().CHANGE_USERINFO(userForm.value);
+    loading.value = false;
+    open.value = false;
 };
 const handleCancel = () => {
     open.value = false;

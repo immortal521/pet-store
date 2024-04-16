@@ -91,7 +91,7 @@ async function login() {
         userName: loginForm.value.username,
         password: encryptPassword(loginForm.value.password),
     };
-
+    // console.log(user.password);
     const result = await useUserStoreHook().loginByUserName(user);
 
     if (result) {

@@ -42,6 +42,23 @@ export const useUserStore = defineStore({
         SET_USERAVATAR(userAvatar) {
             this.userAvatar = userAvatar;
         },
+        async CHANGE_USERINFO(data) {
+            const phone = data.phoneNumber ? data.phoneNumber : this.phone;
+            const sex = data.sex ? data.sex : this.sex;
+            const user = {
+                userId: this.userId,
+                userName: this.userName,
+                phoneNumber: phone,
+                sex: { 男: "0", 女: "1", 保密: "2" }[data.sex],
+            };
+            const res = await httpService.put("/updateUser", user);
+            if (res.data == true) {
+                this.phone = phone;
+                this.sex = sex;
+                localStorage.phone = this.phone;
+                localStorage.sex = this.sex;
+            }
+        },
         async loginByUserName(data) {
             const res = await httpService.post("/login", data);
             if (res.code === 200) {
