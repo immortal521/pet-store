@@ -16,11 +16,30 @@
                 </div>
                 <div class="content">
                     <div>{{ petInfo.petName }}</div>
-                    <div>{{ petInfo.petPrice + "RMB" }}</div>
+                    <div>{{ petInfo.petPrice + " RMB" }}</div>
                     <div>{{ petInfo.sex == 0 ? "公" : "母" }}</div>
                     <div>{{ petInfo.petWeight + " kg" }}</div>
                 </div>
             </div>
+        </div>
+        <div class="control">
+            <a-modal v-model:open="modalOpened" title="确认订单" @ok="handleOk">
+                <a-descriptions bordered :column="2">
+                    <a-descriptions-item label="宠物名称">{{
+                        petInfo.petName
+                    }}</a-descriptions-item>
+                    <a-descriptions-item label="宠物性别">{{
+                        petInfo.sex == 0 ? "公" : "母"
+                    }}</a-descriptions-item>
+                    <a-descriptions-item label="宠物体重">{{
+                        petInfo.petWeight + " kg"
+                    }}</a-descriptions-item>
+                    <a-descriptions-item label="宠物价格">{{
+                        petInfo.petPrice + " RMB"
+                    }}</a-descriptions-item>
+                </a-descriptions>
+            </a-modal>
+            <a-button type="primary" @click="modalOpened = true">购买</a-button>
         </div>
     </div>
 </template>
@@ -60,6 +79,14 @@ async function getPetInfo() {
         petInfo.value.petWeight = Number(petInfo.value.petWeight).toFixed(2);
     }
 }
+
+const modalOpened = ref(false);
+
+async function handleOk() {
+    modalOpened.value = false;
+}
+
+async function createOrder() {}
 </script>
 
 <style scoped>
@@ -118,5 +145,11 @@ async function getPetInfo() {
     overflow: hidden;
     justify-content: center;
     align-content: center;
+}
+
+.control {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
 }
 </style>

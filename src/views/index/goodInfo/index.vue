@@ -18,6 +18,35 @@
                 </div>
             </div>
         </div>
+        <div class="control">
+            <a-modal v-model:open="modalOpened" title="确认订单" @ok="handleOk">
+                <a-descriptions bordered :column="2">
+                    <a-descriptions-item label="商品名称">{{
+                        goodInfo.goodName
+                    }}</a-descriptions-item>
+                    <a-descriptions-item label="商品单价">{{
+                        goodInfo.goodPrice
+                    }}</a-descriptions-item>
+                    <a-descriptions-item label="商品数量">{{
+                        goodsNumber
+                    }}</a-descriptions-item>
+                    <a-descriptions-item label="商品总价">{{
+                        (goodInfo.goodPrice * goodsNumber).toFixed(2) + " RMB"
+                    }}</a-descriptions-item>
+                </a-descriptions>
+            </a-modal>
+            <a-input-number
+                v-model:value="goodsNumber"
+                size="large"
+                :min="1"
+                :max="100000"
+                style="position: relative; left: -150px"
+                @change="console.log(typeof goodInfo.goodPrice)"
+            />
+            <a-button type="primary" @click="modalOpened = true" size="large"
+                >购买</a-button
+            >
+        </div>
     </div>
 </template>
 
@@ -44,6 +73,8 @@ onMounted(() => {
     getGoodInfo();
 });
 
+const goodsNumber = ref(1);
+
 async function getGoodInfo() {
     const result = await httpService.get("/good/getInfo", {
         params: { goodId: goodId.value },
@@ -55,6 +86,14 @@ async function getGoodInfo() {
         goodInfo.value.goodPrice = Number(goodInfo.value.goodPrice).toFixed(2);
     }
 }
+
+const modalOpened = ref(false);
+
+async function handleOk() {
+    modalOpened.value = false;
+}
+
+async function createOrder() {}
 </script>
 
 <style scoped>
@@ -113,5 +152,11 @@ async function getGoodInfo() {
     overflow: hidden;
     justify-content: center;
     align-content: center;
+}
+
+.control {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
 }
 </style>
