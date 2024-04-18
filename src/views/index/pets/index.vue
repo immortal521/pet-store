@@ -3,11 +3,12 @@
         <div class="main">
             <PetCard
                 v-for="item in petsList"
-                :key="item.id"
-                :pet-id="item.id"
-                :pet-name="item.name"
-                :price="item.price"
+                :key="item.petId"
+                :pet-id="item.petId"
+                :pet-name="item.petName"
+                :price="item.petPrice"
                 :pet-type="petType"
+                :pet-img="item.petImageUrl"
             ></PetCard>
         </div>
     </div>
@@ -15,21 +16,31 @@
 
 <script setup>
 import { watch, ref } from "vue";
-import { useRouter, useRoute } from "vue-router";
+import { useRoute } from "vue-router";
 import httpService from "@/utils/http.service";
 import PetCard from "./components/petCard/index.vue";
 
 const route = useRoute();
 const petsList = ref([]);
-const petType = ref("cat");
+const petTypes = { dog: "1", cat: "2", another: "3" };
+const petType = ref("1");
 watch(
     () => route.params.petType,
     async (e) => {
-        petType.value = e;
+        petType.value = petTypes[e];
+        const result = await httpService.get("/pet/getList", {
+            params: {
+                petType: petType.value,
+            },
+        });
+        if (result.code == 200) {
+            petsList.value = result.data;
+        }
+    },
+    {
+        immediate: true,
     }
 );
-
-// let res = await httpService.get("/petProduct/list");
 
 </script>
 

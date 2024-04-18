@@ -6,6 +6,7 @@ import Index from "@/views/index/index.vue";
 import PetGoods from "@/views/index/petGoods/index.vue";
 import Pets from "@/views/index/pets/index.vue";
 import PetInfo from "@/views/index/petInfo/index.vue";
+import GoodInfo from "@/views/index/goodInfo/index.vue";
 import { parseJwt } from "@/utils/jwt";
 
 const router = createRouter({
@@ -41,6 +42,11 @@ const router = createRouter({
                     path: "/petInfo/:id",
                     component: PetInfo,
                 },
+                {
+                    name: "goodInfo",
+                    path: "/goodInfo/:id",
+                    component: GoodInfo,
+                },
             ],
         },
         {
@@ -69,7 +75,8 @@ router.beforeEach(async (to, from) => {
 
 function isLogin() {
     const token = localStorage.token;
-    if (token == "" || typeof token === "undefined" || token==null) return false;
+    if (token == "" || typeof token === "undefined" || token == null)
+        return false;
 
     const exp = parseJwt(token).exp;
 

@@ -3,8 +3,14 @@ import { store } from "@/stores";
 import httpService from "@/utils/http.service";
 import { parseJwt } from "@/utils/jwt";
 
-const userType = ["管理员", "工作人员", "普通用户", "会员用户"];
+const userType = ["普通用户", "会员用户"];
 const sexType = ["男", "女", "保密"];
+
+const config = {
+    headers: {
+        token: localStorage.token,
+    },
+};
 
 export const useUserStore = defineStore({
     id: "user",
@@ -13,7 +19,7 @@ export const useUserStore = defineStore({
         userAvatar: localStorage.userAvatar ? localStorage.userAvatar : "",
         currentPage: 0,
         userId: localStorage.userId ? localStorage.userId : 0,
-        phone: localStorage.phone ? localStorage.phone : "",
+        phoneNumber: localStorage.phoneNumber ? localStorage.phoneNumber : "",
         sex: localStorage.sex ? localStorage.sex : "保密",
         userType: localStorage.userType ? localStorage.userType : "",
     }),
@@ -21,16 +27,16 @@ export const useUserStore = defineStore({
     actions: {
         SET_USERINFO(user) {
             this.userName = user?.user_name;
-            localStorage.userName = this.userName;
-            this.userId = user?.id;
-            localStorage.userId = this.userId;
+            this.userId = user?.user_id;
             this.sex = sexType[user?.sex];
-            localStorage.sex = this.sex;
-            this.phone = user?.phone;
-            localStorage.phone = this.phone;
+            this.phoneNumber = user?.phone_number;
             this.userType = userType[user?.user_type];
-            localStorage.userType = this.userType;
             this.userAvatar = user?.avatar;
+            localStorage.userName = this.userName;
+            localStorage.userId = this.userId;
+            localStorage.sex = this.sex;
+            localStorage.phoneNumber = this.phoneNumber;
+            localStorage.userType = this.userType;
             localStorage.userAvatar = this.userAvatar;
         },
         SET_USERNAME(userName) {
@@ -43,20 +49,29 @@ export const useUserStore = defineStore({
             this.userAvatar = userAvatar;
         },
         async CHANGE_USERINFO(data) {
-            const phone = data.phoneNumber ? data.phoneNumber : this.phone;
+            console.log(data);
+            const phoneNumber = data.phoneNumber
+                ? data.phoneNumber
+                : this.phoneNumber;
             const sex = data.sex ? data.sex : this.sex;
+            const userAvatar = data.userAvatar
+                ? data.userAvatar
+                : this.userAvatar;
             const user = {
                 userId: this.userId,
                 userName: this.userName,
-                phoneNumber: phone,
+                phoneNumber: phoneNumber,
                 sex: { 男: "0", 女: "1", 保密: "2" }[data.sex],
+                avatar: userAvatar,
             };
-            const res = await httpService.put("/updateUser", user);
+            const res = await httpService.put("/updateUser", user, config);
             if (res.data == true) {
-                this.phone = phone;
+                this.phoneNumber = phoneNumber;
                 this.sex = sex;
-                localStorage.phone = this.phone;
+                this.userAvatar = userAvatar;
+                localStorage.phoneNumber = this.phoneNumber;
                 localStorage.sex = this.sex;
+                localStorage.userAvatar = this.userAvatar;
             }
         },
         async loginByUserName(data) {

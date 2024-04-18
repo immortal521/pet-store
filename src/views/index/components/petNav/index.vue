@@ -3,7 +3,7 @@
         <div class="content">
             <PetLogo style="flex-grow: 1"></PetLogo>
             <div class="user">
-                <PetUser :userAvatar="user.avatar">
+                <PetUser :userAvatar="user.userAvatar">
                     <PetUserItem>
                         <RouterLink
                             to="/user"
@@ -29,11 +29,12 @@ import { RouterLink } from "vue-router";
 import router from "@/router/index.js";
 
 function exitLogin() {
-    localStorage.removeItem("token");
+    localStorage.clear();
     router.push("/login");
 }
 
 const user = useUserStoreHook().$state;
+console.log(user);
 </script>
 
 <style scoped>
@@ -41,7 +42,7 @@ const user = useUserStoreHook().$state;
     position: fixed;
     display: flex;
     justify-content: center;
-    z-index: 10000;
+    z-index: 1000;
     width: 100%;
     height: 50px;
     box-shadow: 0 2px 2px #000;

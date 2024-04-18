@@ -25,7 +25,9 @@
                     ><RouterLink to="/pets/dog">狗</RouterLink></a-menu-item
                 >
                 <a-menu-item key="4"
-                    ><RouterLink to="/pets/pig">猪</RouterLink></a-menu-item
+                    ><RouterLink to="/pets/another"
+                        >其他</RouterLink
+                    ></a-menu-item
                 >
             </a-sub-menu>
             <a-menu-item key="5">
@@ -49,7 +51,8 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
+import { useRoute } from "vue-router";
 import {
     PieChartOutlined,
     DesktopOutlined,
@@ -61,11 +64,30 @@ import {
 import { RouterLink } from "vue-router";
 
 const selectedKeys = ref(["1"]);
-
 const collapsed = ref(false);
 function toggleCollapsed() {
     collapsed.value = !collapsed.value;
 }
+
+const route = ref(useRoute());
+
+const page = {
+    index: "1",
+    cat: "2",
+    dog: "3",
+    another: "4",
+    petGoods: "5",
+};
+
+watch(
+    () => route.value.fullPath,
+    (e) => {
+        const parts = e.split("/");
+        const lastPart = parts[parts.length - 1];
+        selectedKeys.value[0] = page[lastPart];
+    },
+    { immediate: true }
+);
 </script>
 
 <style scoped>

@@ -7,7 +7,17 @@
                 </ul>
             </template>
             <div class="head-image">
-                <img :src="userAvatar" alt="1" v-if="existAvator" />
+                <img
+                    :src="userAvatar"
+                    alt="1"
+                    v-if="existAvatar"
+                    style="
+                        object-fit: cover;
+                        float: right;
+                        width: 100%;
+                        height: 100%;
+                    "
+                />
                 <UserOutlined v-else />
             </div>
         </a-popover>
@@ -24,9 +34,12 @@ const props = defineProps({
     },
 });
 
-
-const existAvator = computed(() => {
-    return props.userAvatar !== "" && typeof props.userAvatar !== "undefined";
+const existAvatar = computed(() => {
+    return (
+        props.userAvatar !== "" &&
+        typeof props.userAvatar !== "undefined" &&
+        props.userAvatar !== "null"
+    );
 });
 </script>
 

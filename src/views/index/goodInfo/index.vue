@@ -5,20 +5,16 @@
     <div class="container" v-else>
         <div class="info">
             <div class="image">
-                <a-image :width="300" :src="petInfo.petImageUrl" />
+                <a-image :width="300" :src="goodInfo.goodImageUrl" />
             </div>
             <div class="description">
                 <div class="title">
-                    <div>宠物名称</div>
+                    <div>商品名称</div>
                     <div>宠物价格</div>
-                    <div>宠物性别</div>
-                    <div>宠物体重</div>
                 </div>
                 <div class="content">
-                    <div>{{ petInfo.petName }}</div>
-                    <div>{{ petInfo.petPrice + "RMB" }}</div>
-                    <div>{{ petInfo.sex == 0 ? "公" : "母" }}</div>
-                    <div>{{ petInfo.petWeight + " kg" }}</div>
+                    <div>{{ goodInfo.goodName }}</div>
+                    <div>{{ goodInfo.goodPrice }}</div>
                 </div>
             </div>
         </div>
@@ -31,13 +27,13 @@ import httpService from "@/utils/http.service.js";
 import { useRoute } from "vue-router";
 const route = useRoute();
 const isSpin = ref(true);
-const petInfo = ref({});
-const petId = ref(0);
+const goodInfo = ref({});
+const goodId = ref(0);
 
 watch(
     () => route.params.id,
     (e) => {
-        petId.value = e;
+        goodId.value = e;
     },
     {
         immediate: true,
@@ -45,19 +41,18 @@ watch(
 );
 
 onMounted(() => {
-    getPetInfo();
+    getGoodInfo();
 });
 
-async function getPetInfo() {
-    const result = await httpService.get("/pet/getInfo", {
-        params: { petId: petId.value },
+async function getGoodInfo() {
+    const result = await httpService.get("/good/getInfo", {
+        params: { goodId: goodId.value },
     });
 
     if (result.code == 200) {
-        petInfo.value = result.data;
+        goodInfo.value = result.data;
         isSpin.value = false;
-        petInfo.value.petPrice = Number(petInfo.value.petPrice).toFixed(2);
-        petInfo.value.petWeight = Number(petInfo.value.petWeight).toFixed(2);
+        goodInfo.value.goodPrice = Number(goodInfo.value.goodPrice).toFixed(2);
     }
 }
 </script>

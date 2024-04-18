@@ -98,7 +98,7 @@ async function register() {
     const newUser = {
         userName: registForm.value.username,
         password: encryptPassword(registForm.value.firstPassword),
-        phoneNumber: registForm.value.phone,
+        phoneNumber: registForm.value.phoneNumber,
     };
     const result = await useUserStoreHook().registByUserName(newUser);
     if (result.code == 200) {
