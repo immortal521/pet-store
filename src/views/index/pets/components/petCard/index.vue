@@ -8,9 +8,7 @@
                 <div style="font-size: 20px; text-align: center">
                     <span>{{ props.petName }}</span>
                 </div>
-                <div
-                    style="color: #ffaaff; text-align: end; margin-right: 20px"
-                >
+                <div style="color: red; text-align: end; margin-right: 20px">
                     <span>{{ "￥" + props.price }}</span>
                 </div>
             </footer>

@@ -18,7 +18,7 @@
                     <span>{{ props.goodName }}</span>
                 </div>
                 <div
-                    style="color: #ffaaff; text-align: end; margin-right: 20px"
+                    style="color: red; text-align: end; margin-right: 20px"
                 >
                     <span>{{ "￥" + props.price }}</span>
                 </div>

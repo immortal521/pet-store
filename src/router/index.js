@@ -1,13 +1,14 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-import Welcome from "@/views/welcome/index.vue";
-import Login from "@/views/login/index.vue";
-import User from "@/views/index/user/index.vue";
-import Index from "@/views/index/index.vue";
-import PetGoods from "@/views/index/petGoods/index.vue";
-import Pets from "@/views/index/pets/index.vue";
-import PetInfo from "@/views/index/petInfo/index.vue";
-import GoodInfo from "@/views/index/goodInfo/index.vue";
 import { parseJwt } from "@/utils/jwt";
+const Welcome = () => import("@/views/welcome/index.vue");
+const Login = () => import("@/views/login/index.vue");
+const User = () => import("@/views/index/user/index.vue");
+const Index = () => import("@/views/index/index.vue");
+const PetGoods = () => import("@/views/index/petGoods/index.vue");
+const Pets = () => import("@/views/index/pets/index.vue");
+const PetInfo = () => import("@/views/index/petInfo/index.vue");
+const GoodInfo = () => import("@/views/index/goodInfo/index.vue");
+const Order = () => import("@/views/index/order/index.vue");
 
 const router = createRouter({
     history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -46,6 +47,11 @@ const router = createRouter({
                     name: "goodInfo",
                     path: "/goodInfo/:id",
                     component: GoodInfo,
+                },
+                {
+                    name: "order",
+                    path: "/order",
+                    component: Order,
                 },
             ],
         },

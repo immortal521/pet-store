@@ -19,7 +19,7 @@
             </div>
         </div>
         <div class="control">
-            <a-modal v-model:open="modalOpened" title="确认订单" @ok="handleOk">
+            <a-modal v-model:open="modalOpened" title="确认订单" :footer="null">
                 <a-descriptions bordered :column="2">
                     <a-descriptions-item label="商品名称">{{
                         goodInfo.goodName
@@ -34,6 +34,23 @@
                         (goodInfo.goodPrice * goodsNumber).toFixed(2) + " RMB"
                     }}</a-descriptions-item>
                 </a-descriptions>
+                <div
+                    style="
+                        display: flex;
+                        justify-content: space-around;
+                        padding: 30px 20px 10px 20px;
+                    "
+                >
+                    <a-button @click="modalOpened = false">取消</a-button>
+                    <a-popconfirm
+                        title="确认购买?"
+                        ok-text="Yes"
+                        cancel-text="No"
+                        @confirm="createOrder"
+                    >
+                        <a-button type="primary">购买</a-button>
+                    </a-popconfirm>
+                </div>
             </a-modal>
             <a-input-number
                 v-model:value="goodsNumber"
@@ -89,11 +106,31 @@ async function getGoodInfo() {
 
 const modalOpened = ref(false);
 
-async function handleOk() {
-    modalOpened.value = false;
+// 未修改
+async function createOrder() {
+    const config = {
+        headers: {
+            token: localStorage.token,
+        },
+    };
+    const data = {
+        userId: useUserStoreHook().$state.userId,
+        petId: petId.value,
+        orderPrice: petInfo.value.petPrice,
+    };
+    const result = await httpService.post("/pet/placeAnOrder", data, config);
+    if (result.code === 200) {
+        modalOpened.value = false;
+        openNotificationWithIcon("info");
+    }
 }
 
-async function createOrder() {}
+const openNotificationWithIcon = (type) => {
+    notification[type]({
+        message: "订单创建成功",
+        description: "订单未完成，前往订单页完成订单",
+    });
+};
 </script>
 
 <style scoped>

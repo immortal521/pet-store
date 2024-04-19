@@ -36,11 +36,11 @@
             </a-menu-item>
             <a-menu-item key="6">
                 <FileOutlined />
-                <span>寄养</span>
+                <span><RouterLink to="/board">寄养</RouterLink></span>
             </a-menu-item>
             <a-menu-item key="7">
                 <FileOutlined />
-                <span>订单</span>
+                <span><RouterLink to="/order">订单</RouterLink></span>
             </a-menu-item>
         </a-menu>
         <div class="openMenu" @click="toggleCollapsed">
@@ -88,6 +88,8 @@ watch(
     },
     { immediate: true }
 );
+
+
 </script>
 
 <style scoped>
