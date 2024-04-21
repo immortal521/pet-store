@@ -65,7 +65,7 @@ import { checkPassword } from "./utils/rule";
 import router from "@/router/index.js";
 import { checkForm } from "./utils/formUtils";
 import PetDialog from "@/components/petDialog/index.vue";
-import { encryptPassword } from "./utils/pwdUtils";
+import { encryptPassword } from "../../utils/pwdUtils";
 import PetLogo from "@/components/petLogo/index.vue";
 
 /**

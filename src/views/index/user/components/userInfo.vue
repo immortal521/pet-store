@@ -174,12 +174,10 @@ async function uploadAvatar(e) {
 }
 
 const handleChange = (info) => {
-    console.log(info);
     if (info.file.status === "uploading") {
         imageloading.value = true;
         return;
     }
-    console.log(info);
     if (info.file.status === "done") {
         // Get this url from response in real world.
         getBase64(info.file.originFileObj, (base64Url) => {
@@ -207,7 +205,6 @@ const beforeUpload = (file) => {
 const handleOk = async () => {
     loading.value = true;
     userForm.value.userAvatar = newAvatarUrl.value;
-    console.log(userForm.value);
     await useUserStoreHook().CHANGE_USERINFO(userForm.value);
     loading.value = false;
     open.value = false;

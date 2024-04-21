@@ -9,6 +9,7 @@ const Pets = () => import("@/views/index/pets/index.vue");
 const PetInfo = () => import("@/views/index/petInfo/index.vue");
 const GoodInfo = () => import("@/views/index/goodInfo/index.vue");
 const Order = () => import("@/views/index/order/index.vue");
+const Board = () => import("@/views/index/board/index.vue");
 
 const router = createRouter({
     history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -23,6 +24,11 @@ const router = createRouter({
             path: "/index",
             component: Index,
             children: [
+                {
+                    path: "/index",
+                    component: () => import("@/views/index/welcome/index.vue"),
+                },
+
                 {
                     name: "pets",
                     path: "/pets/:petType",
@@ -47,6 +53,11 @@ const router = createRouter({
                     name: "goodInfo",
                     path: "/goodInfo/:id",
                     component: GoodInfo,
+                },
+                {
+                    name: "board",
+                    path: "/board",
+                    component: Board,
                 },
                 {
                     name: "order",

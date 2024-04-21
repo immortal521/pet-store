@@ -34,7 +34,6 @@ function exitLogin() {
 }
 
 const user = useUserStoreHook().$state;
-console.log(user);
 </script>
 
 <style scoped>

@@ -7,6 +7,29 @@
         :loading="loading"
         @change="handleTableChange"
     >
+        <template #bodyCell="{ column, record }">
+            <template v-if="column.key === 'operation'">
+                <a-button
+                    type="primary"
+                    size="small"
+                    style="margin-right: 10px"
+                    :disabled="
+                        record.boardStatus == '寄养中' ||
+                        record.boardStatus == '已逾期'
+                    "
+                    @click="completeTheOrder(record)"
+                    >支付</a-button
+                >
+                <a-popconfirm
+                    title="删除订单？"
+                    ok-text="Yes"
+                    cancel-text="No"
+                    @confirm="deleteOrder(record)"
+                >
+                    <a-button type="primary" danger size="small">删除</a-button>
+                </a-popconfirm>
+            </template>
+        </template>
     </a-table>
 </template>
 <script setup>
@@ -14,7 +37,7 @@ import { computed, ref, onMounted } from "vue";
 import httpService from "@/utils/http.service.js";
 import { useUserStoreHook } from "@/stores/modules/user";
 const current = ref(1);
-const total = ref(20);
+const total = ref(0);
 const pagination = computed(() => ({
     // 分页功能配置
     total: total.value,
@@ -37,8 +60,8 @@ const handleTableChange = async (pag) => {
 const columns = [
     {
         title: "订单号",
-        dataIndex: "orderId",
-        key: "orderId",
+        dataIndex: "boardId",
+        key: "boardId",
     },
     {
         title: "宠物名称",
@@ -46,28 +69,44 @@ const columns = [
         key: "petName",
     },
     {
-        title: "订单价格",
-        dataIndex: "petPrice",
-        key: "petPrice",
+        title: "订单开始时间",
+        dataIndex: "boardStartDate",
+        key: "boardStartDate",
     },
     {
-        title: "订单时间",
-        key: "orderCreateDate",
-        dataIndex: "orderCreateDate",
+        title: "订单结束时间",
+        key: "boardEndDate",
+        dataIndex: "boardEndDate",
+    },
+    {
+        title: "订单总额",
+        key: "boardFee",
+        dataIndex: "boardFee",
+    },
+    {
+        title: "订单创建时间",
+        key: "boardCreateDate",
+        dataIndex: "boardCreateDate",
     },
     {
         title: "订单状态",
-        key: "orderStatus",
-        dataIndex: "orderStatus",
+        key: "boardStatus",
+        dataIndex: "boardStatus",
+    },
+    {
+        title: "操作",
+        key: "operation",
+        fixed: "right",
+        width: 200,
     },
 ];
 
-const orderStatus = ["已完成", "待完成", "已取消"];
+const boardStatus = ["未支付", "寄养中", "已逾期"];
 const loading = ref(true);
 const userId = useUserStoreHook().$state.userId;
 async function getPageData() {
     loading.value = true;
-    const result = await httpService.get("/pet/getOrders", {
+    const result = await httpService.get("/board/getOrders", {
         params: {
             userId: userId,
             page: current.value,
@@ -80,10 +119,49 @@ async function getPageData() {
         loading.value = false;
     }
     for (let i = 0; i < data.value.length; i++) {
-        data.value[i].petPrice = data.value[i].petPrice.toFixed(2) + " RMB";
-        data.value[i].orderStatus = orderStatus[data.value[i].orderStatus];
+        data.value[i].boardFee = data.value[i].boardFee.toFixed(2) + " RMB";
+        data.value[i].boardStatus = boardStatus[data.value[i].boardStatus];
     }
+
 }
 
 const data = ref([]);
+const headers = {
+    token: localStorage.token,
+};
+
+async function deleteOrder(record) {
+    const deleteResult = await httpService.delete("/board/deleteBoard", {
+        params: {
+            userId: useUserStoreHook().$state.userId,
+            boardId: record.boardId,
+        },
+        headers: headers,
+    });
+    if ((data.value.length - 1) % 5 == 0 && current.value != 1) {
+        current.value -= 1;
+    }
+
+    if (deleteResult.code == 200) {
+        await getPageData();
+    }
+}
+
+async function completeTheOrder(record) {
+    const data = {
+        boardId: record.boardId,
+        boardStatus: "1",
+    };
+    const config = {
+        headers: headers,
+    };
+    const updateResult = await httpService.put(
+        "/board/updateBoardStatus",
+        data,
+        config
+    );
+    if (updateResult.code == 200) {
+        record.boardStatus = "寄养中";
+    }
+}
 </script>

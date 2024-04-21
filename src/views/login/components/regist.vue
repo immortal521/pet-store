@@ -66,7 +66,7 @@ import { ref, computed } from "vue";
 import { useUserStoreHook } from "@/stores/modules/user";
 import { checkForm, formToEmpty } from "../utils/formUtils";
 import PetDialog from "@/components/petDialog/index.vue";
-import { encryptPassword } from "../utils/pwdUtils";
+import { encryptPassword } from "../../../utils/pwdUtils";
 import { checkPassword } from "../utils/rule";
 
 const registForm = ref({

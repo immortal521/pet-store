@@ -49,7 +49,6 @@ export const useUserStore = defineStore({
             this.userAvatar = userAvatar;
         },
         async CHANGE_USERINFO(data) {
-            console.log(data);
             const phoneNumber = data.phoneNumber
                 ? data.phoneNumber
                 : this.phoneNumber;

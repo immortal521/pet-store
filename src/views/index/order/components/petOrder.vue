@@ -14,6 +14,7 @@
                     size="small"
                     style="margin-right: 10px"
                     :disabled="record.orderStatus == '已完成'"
+                    @click="completeTheOrder(record)"
                     >支付</a-button
                 >
                 <a-popconfirm
@@ -33,7 +34,7 @@ import { computed, ref, onMounted } from "vue";
 import httpService from "@/utils/http.service.js";
 import { useUserStoreHook } from "@/stores/modules/user";
 const current = ref(1);
-const total = ref(20);
+const total = ref(0);
 const pagination = computed(() => ({
     // 分页功能配置
     total: total.value,
@@ -111,13 +112,10 @@ async function getPageData() {
 }
 
 const data = ref([]);
-
+const headers = {
+    token: localStorage.token,
+};
 async function deleteOrder(record) {
-    console.log(record);
-    const headers = {
-        token: localStorage.token,
-    };
-
     const deleteResult = await httpService.delete("/pet/deleteOrder", {
         params: {
             userId: useUserStoreHook().$state.userId,
@@ -131,6 +129,24 @@ async function deleteOrder(record) {
 
     if (deleteResult.code == 200) {
         await getPageData();
+    }
+}
+
+async function completeTheOrder(record) {
+    const data = {
+        orderId: record.orderId,
+        orderStatus: "0",
+    };
+    const config = {
+        headers: headers,
+    };
+    const updateResult = await httpService.put(
+        "/pet/updateOrderStatus",
+        data,
+        config
+    );
+    if (updateResult.code == 200) {
+        record.orderStatus = "已完成";
     }
 }
 </script>

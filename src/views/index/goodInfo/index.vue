@@ -10,11 +10,13 @@
             <div class="description">
                 <div class="title">
                     <div>商品名称</div>
-                    <div>宠物价格</div>
+                    <div>商品单价</div>
+                    <div>商品描述</div>
                 </div>
                 <div class="content">
                     <div>{{ goodInfo.goodName }}</div>
                     <div>{{ goodInfo.goodPrice }}</div>
+                    <div>{{ goodInfo.goodDescription }}</div>
                 </div>
             </div>
         </div>
@@ -58,7 +60,6 @@
                 :min="1"
                 :max="100000"
                 style="position: relative; left: -150px"
-                @change="console.log(typeof goodInfo.goodPrice)"
             />
             <a-button type="primary" @click="modalOpened = true" size="large"
                 >购买</a-button
@@ -71,6 +72,9 @@
 import { ref, watch, onMounted } from "vue";
 import httpService from "@/utils/http.service.js";
 import { useRoute } from "vue-router";
+import { useUserStoreHook } from "@/stores/modules/user";
+import { notification } from "ant-design-vue";
+
 const route = useRoute();
 const isSpin = ref(true);
 const goodInfo = ref({});
@@ -106,7 +110,6 @@ async function getGoodInfo() {
 
 const modalOpened = ref(false);
 
-// 未修改
 async function createOrder() {
     const config = {
         headers: {
@@ -115,10 +118,10 @@ async function createOrder() {
     };
     const data = {
         userId: useUserStoreHook().$state.userId,
-        petId: petId.value,
-        orderPrice: petInfo.value.petPrice,
+        goodId: goodId.value,
+        goodNumber: goodsNumber.value,
     };
-    const result = await httpService.post("/pet/placeAnOrder", data, config);
+    const result = await httpService.post("/good/placeAnOrder", data, config);
     if (result.code === 200) {
         modalOpened.value = false;
         openNotificationWithIcon("info");
@@ -170,7 +173,7 @@ const openNotificationWithIcon = (type) => {
 }
 
 .description > .content {
-    width: 85%;
+    width: 75%;
     font-size: 16px;
     color: #000;
     display: flex;

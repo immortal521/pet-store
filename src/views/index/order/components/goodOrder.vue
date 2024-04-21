@@ -14,6 +14,7 @@
                     size="small"
                     style="margin-right: 10px"
                     :disabled="record.orderStatus == '已完成'"
+                    @click="completeTheOrder(record)"
                     >支付</a-button
                 >
                 <a-popconfirm
@@ -124,12 +125,10 @@ async function getPageData() {
 
 const data = ref([]);
 
+const headers = {
+    token: localStorage.token,
+};
 async function deleteOrder(record) {
-    console.log(record);
-    const headers = {
-        token: localStorage.token,
-    };
-
     const deleteResult = await httpService.delete("/good/deleteOrder", {
         params: {
             userId: useUserStoreHook().$state.userId,
@@ -140,9 +139,26 @@ async function deleteOrder(record) {
     if ((data.value.length - 1) % 5 == 0 && current.value != 1) {
         current.value -= 1;
     }
-
     if (deleteResult.code == 200) {
         await getPageData();
+    }
+}
+
+async function completeTheOrder(record) {
+    const data = {
+        orderId: record.orderId,
+        orderStatus: "0",
+    };
+    const config = {
+        headers: headers,
+    };
+    const updateResult = await httpService.put(
+        "/good/updateOrderStatus",
+        data,
+        config
+    );
+    if (updateResult.code == 200) {
+        record.orderStatus = "已完成";
     }
 }
 </script>
