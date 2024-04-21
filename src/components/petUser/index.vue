@@ -38,7 +38,8 @@ const existAvatar = computed(() => {
     return (
         props.userAvatar !== "" &&
         typeof props.userAvatar !== "undefined" &&
-        props.userAvatar !== "null"
+        props.userAvatar !== "null" &&
+        props.userAvatar != null
     );
 });
 </script>
